@@ -12,10 +12,9 @@
         K: {sound: 'tom'},
         L: {sound: 'tink'},
     };
-    const KEYS = Object.keys(KEY_MAP).map(key => ({letter: key, sound: KEY_MAP[key].sound, char: key.charCodeAt(0)}));
-
-    console.info(`Generated keys:`);
-    console.table(KEYS);
+    Object.keys(KEY_MAP).forEach(key => {
+        KEY_MAP[key].char = key.charCodeAt(0);
+    });
 
     /**
      * Play sound on key down
@@ -57,63 +56,34 @@
     }
 
     /**
-     * Create a single key element
-     *
-     * @param {Object} key
-     * @param {Node} container
-     */
-    function createKeyElement(key, container) {
-        const keyEl = KEY_MAP[key.letter].el = document.createElement('div');
-        keyEl.className = 'key';
-        keyEl.setAttribute('data-key', key.char);
-
-        keyEl.innerHTML = `
-            <kbd class="key-name">${key.letter}</kbd>
-            <span class="key-description">${key.sound}</span>
-        `;
-
-        container.appendChild(keyEl);
-    }
-
-    /**
-     * Create a single audio element for a key
-     *
-     * @param {Object} key
-     */
-    function createAudioElement(key) {
-        const audioEl = KEY_MAP[key.letter].audioEl = document.createElement('audio');
-        audioEl.setAttribute('data-key', key.char);
-        audioEl.src = `sounds/${key.sound}.wav`;
-
-        document.body.appendChild(audioEl);
-    }
-
-    /**
      * Initialize key and audio elements
-     *
-     * @param {Object[]} keys
      */
-    function initKeys(keys) {
+    function initKeys() {
         const keysContainer = document.getElementById('keys');
         keysContainer.innerHTML = '';
 
-        keys.forEach(key => {
-            createKeyElement(key, keysContainer);
-            createAudioElement(key);
+        Object.keys(KEY_MAP).forEach(char => {
+            const key = KEY_MAP[char];
+
+            // Create the key element
+            const keyEl = KEY_MAP[char].el = document.createElement('div');
+            keyEl.className = 'key';
+            keyEl.setAttribute('data-key', key.char);
+            keyEl.innerHTML = `
+                <kbd class="key-name">${char}</kbd>
+                <span class="key-description">${key.sound}</span>
+            `;
+            keysContainer.appendChild(keyEl);
+
+            // Create the matching audio element
+            const audioEl = KEY_MAP[char].audioEl = document.createElement('audio');
+            audioEl.setAttribute('data-key', key.char);
+            audioEl.src = `sounds/${key.sound}.wav`;
+            document.body.appendChild(audioEl);
         });
     }
 
-    function ready() {
-        initKeys(KEYS);
-
-        document.addEventListener('keydown', onKeyDown);
-        document.addEventListener('keyup', onKeyUp);
-    }
-
-    if (document.readyState !== 'loading') {
-        ready()
-    } else {
-        // the document hasn't finished loading/parsing yet so let's add an event handler
-        document.addEventListener('DOMContentLoaded', ready)
-    }
+    initKeys();
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
 })();
