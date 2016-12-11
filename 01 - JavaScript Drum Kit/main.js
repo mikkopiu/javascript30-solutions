@@ -24,17 +24,16 @@
      * @returns {boolean}
      */
     function onKeyDown(evt) {
-        let { keyCode, code } = evt;
+        let { code } = evt;
         code = code.replace('Key', '');
         if (!KEY_MAP[code]) {
             return false;
         }
 
-        const keyEl = document.querySelector(`.key[data-key="${keyCode}"]`);
-        const audioEl = document.querySelector(`audio[data-key="${keyCode}"]`);
+        let keyEl = KEY_MAP[code].el;
+        let audioEl = KEY_MAP[code].audioEl;
 
-        // Stop current playback and event listener
-        audioEl.pause();
+        // Reset playback
         audioEl.currentTime = 0;
 
         // Start playback
@@ -49,11 +48,12 @@
      * @returns {boolean}
      */
     function onKeyUp(evt) {
-        let { keyCode, code } = evt;
-        if (!KEY_MAP[code.replace('Key', '')]) {
+        let { code } = evt;
+        code = code.replace('Key', '');
+        if (!KEY_MAP[code]) {
             return false;
         }
-        document.querySelector(`.key[data-key="${keyCode}"]`).classList.remove('playing');
+        KEY_MAP[code].el.classList.remove('playing');
     }
 
     /**
@@ -63,7 +63,7 @@
      * @param {Node} container
      */
     function createKeyElement(key, container) {
-        const keyEl = document.createElement('div');
+        const keyEl = KEY_MAP[key.letter].el = document.createElement('div');
         keyEl.className = 'key';
         keyEl.setAttribute('data-key', key.char);
 
@@ -81,7 +81,7 @@
      * @param {Object} key
      */
     function createAudioElement(key) {
-        const audioEl = document.createElement('audio');
+        const audioEl = KEY_MAP[key.letter].audioEl = document.createElement('audio');
         audioEl.setAttribute('data-key', key.char);
         audioEl.src = `sounds/${key.sound}.wav`;
 
