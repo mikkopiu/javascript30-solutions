@@ -68,7 +68,7 @@ body {
 }
 
 .panel.active {
-    flex: 3;
+    flex: 10;
 }
 .panel.active p:first-child, .panel.active p:last-child {
     transform: translateY(0%);
