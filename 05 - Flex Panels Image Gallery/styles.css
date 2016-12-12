@@ -1,0 +1,126 @@
+@charset "UTF-8";
+
+:root {
+    --transitiontime: 700ms;
+    --transitiondelay: 250ms;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+html, body, .panels {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Permanent Marker', cursive;
+}
+
+/* MAIN STYLES */
+
+.panels {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    overflow: hidden;
+}
+
+.panel {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: 2em;
+    padding: 2em;
+    color: white;
+    text-shadow: 0 0 0.5em rgba(0, 0, 0, 0.7);
+    background-size: cover;
+
+    transition: all var(--transitiontime) cubic-bezier(0.61,-0.19, 0.7,-0.11);
+}
+.panel p:first-child, .panel p:last-child {
+    transition: transform var(--transitiontime) ease-in-out var(--transitiondelay);
+}
+.panel p:first-child {
+    transform: translateY(-200px);
+}
+.panel p:nth-child(2) {
+    transition: font-size var(--transitiontime) cubic-bezier(0.61,-0.19, 0.7,-0.11);
+}
+.panel p:last-child {
+    transform: translateY(200px);
+}
+
+.panel.active {
+    flex: 3;
+}
+.panel.active p:first-child, .panel.active p:last-child {
+    transform: translateY(0px);
+}
+.panel.active p:nth-child(2) {
+    font-size: 3em;
+}
+
+/* EXTRA */
+/* Panel backgrounds, from: http://lea.verou.me/css3patterns/ and https://css-tricks.com/stripes-css/ */
+
+.panel:nth-child(1) {
+    background: repeating-radial-gradient(
+            circle,
+            purple,
+            purple 10px,
+            #4b026f 10px,
+            #4b026f 20px
+    );
+}
+
+.panel:nth-child(2) {
+    background: repeating-linear-gradient(
+            45deg,
+            #5e2f13,
+            #5e2f13 10px,
+            #ff8e07 10px,
+            #ff8e07 20px
+    );
+}
+
+.panel:nth-child(3) {
+    background:
+            radial-gradient(circle at 0% 50%, rgba(96, 16, 48, 0) 9px, #313866 10px, rgba(96, 16, 48, 0) 11px) 0px 10px,
+            radial-gradient(at 100% 100%,      rgba(96, 16, 48, 0) 9px, #313866 10px, rgba(96, 16, 48, 0) 11px),
+            #88ea33;
+    background-size: 20px 20px;
+}
+
+.panel:nth-child(4) {
+    background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+    background-color:#282828;
+    background-size:16px 16px;
+}
+
+.panel:nth-child(5) {
+    background: linear-gradient(
+            to bottom,
+            #960315,
+            #960315 50%,
+            #341818 50%,
+            #341818
+    );
+    /* The rectangle in which to repeat.
+       It can be fully wide in this case */
+    background-size: 100% 20px;
+}
