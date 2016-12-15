@@ -75,3 +75,7 @@ body::-webkit-scrollbar { width: 0 !important }
     transform: perspective(6.25em) rotateX(-3deg) translateY(0.1875em);
     background: linear-gradient(to top,  #ffffff 0%,#EFEFEF 100%);
 }
+
+.hl {
+    background-color: var(--bg-color);
+}
