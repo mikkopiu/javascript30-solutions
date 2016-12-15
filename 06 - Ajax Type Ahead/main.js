@@ -6,6 +6,7 @@
     const suggestionsEl = document.getElementById('suggestions');
     const fullData = [];
     let filteredData = [];
+    let idleCallbacks = [];
 
     function init() {
         fetch(endpoint)
@@ -23,8 +24,10 @@
     function onInput({ currentTarget }) {
         const input = currentTarget.value;
 
+        idleCallbacks.forEach(cancelIdleCallback);
+
         if (!input) {
-            showResults(fullData, null);
+            showResults(fullData, '');
             return false;
         }
 
@@ -36,20 +39,46 @@
     }
 
     function showResults(results, input) {
-        // TODO: Chunked render (this is way too heavy)
-        suggestionsEl.innerHTML = results
-            .map(result => {
-                const highlightRegex = new RegExp(input, 'gi');
-                const city = result.city.replace(highlightRegex, `<span class="hl">${input}</span>`);
-                const state = result.state.replace(highlightRegex, `<span class="hl">${input}</span>`);
+        const chunks = [];
+        for (let i = 0; i < results.length; i += 20) {
+            chunks.push(results.slice(i, i + 20));
+        }
+
+        const htmlList = chunks.map(chunk => {
+            return chunk
+                .map(result => {
+                    const highlightRegex = new RegExp(input, 'gi');
+                    const city = result.city.replace(highlightRegex, `<span class="hl">${input}</span>`);
+                    const state = result.state.replace(highlightRegex, `<span class="hl">${input}</span>`);
 
 
-                return `<li class="suggestion-item">
+                    return `<li class="suggestion-item">
                     <span class="name">${city}, ${state}</span>
                     <span class="population">${result.population.toLocaleString('fi-fi')}</span>
                 </li>`
-            })
-            .join('');
+                })
+                .join('');
+        });
+
+        if (htmlList.length > 0) {
+            appendChunks(htmlList);
+        } else {
+            suggestionsEl.innerHTML = '';
+        }
+    }
+
+    function appendChunks(chunks, ind = 0) {
+        idleCallbacks.push(requestIdleCallback(() => {
+            if (ind === 0) {
+                suggestionsEl.innerHTML = chunks[ind];
+            } else {
+                suggestionsEl.insertAdjacentHTML('beforeend', chunks[ind]);
+            }
+
+            if (ind !== chunks.length - 1) {
+                appendChunks(chunks, ind + 1);
+            }
+        }));
     }
 
     init();
