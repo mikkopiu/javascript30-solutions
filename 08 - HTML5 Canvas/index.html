@@ -10,12 +10,34 @@
             overflow: hidden;
         }
 
+        .info-container, #draw {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .info-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 1;
+        }
+
         canvas {
             display: block;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
+<div class="info-container">
+    <h1>Draw Here</h1>
+</div>
 <canvas id="draw" width="800" height="800"></canvas>
 
 <script src="main.js" async></script>
