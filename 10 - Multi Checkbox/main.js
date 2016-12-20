@@ -4,6 +4,14 @@
     const inputs = [];
     let prevEnabledInd = 0;
 
+    /**
+     * Handle checkbox click
+     * When shift is held, checks everything between
+     * current and closest checked sibling.
+     *
+     * @param currentTarget
+     * @param shiftKey
+     */
     function onCheck({ currentTarget, shiftKey }) {
         const inputInd = inputs.indexOf(currentTarget);
 
@@ -34,6 +42,13 @@
         prevEnabledInd = inputInd;
     }
 
+    /**
+     * Find index of closest enabled sibling preceding
+     * the current element.
+     *
+     * @param {Number} startInd
+     * @returns {Number}
+     */
     function indexOfPrecedingEnabled(startInd) {
         let i;
         for (i = startInd; i > 0; i--) {
@@ -44,6 +59,13 @@
         return i;
     }
 
+    /**
+     * Find index of closest enabled sibling after
+     * of the current element.
+     *
+     * @param {Number} startInd
+     * @returns {Number}
+     */
     function indexOfNextEnabled(startInd) {
         let i;
         for (i = startInd; i < inputs.length; i++) {
