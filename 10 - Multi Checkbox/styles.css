@@ -1,0 +1,51 @@
+@charset "UTf-8";
+
+:root {
+    --bg-color: #60eba3;
+}
+
+html {
+    font-family: "Open Sans", sans-serif;
+    background: var(--bg-color);
+}
+
+.inbox {
+    max-width: 25em;
+    margin: 2.5em auto;
+    background: #fefefe;
+    border-radius: 0.25em;
+    box-shadow: 0.5em 0.5em 0 rgba(0, 0, 0, 0.1);
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    border-bottom: 0.1em solid #f1f1f1;
+}
+
+.item:last-child {
+    border-bottom: 0;
+}
+
+.checkbox {
+    margin: 1.5em;
+}
+
+.checkbox:checked + .description {
+    background: #f9f9f9;
+    text-decoration: line-through;
+}
+
+.description {
+    margin: 0;
+    padding: 1em;
+    transition: background 0.2s;
+    flex: 1;
+    font-size: 1.25em;
+    border-left: 1px solid #b5b5b5;
+}
+
+.details {
+    text-align: center;
+    font-size: 1em;
+}
