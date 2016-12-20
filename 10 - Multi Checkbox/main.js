@@ -4,7 +4,7 @@
     const inputs = [];
     let prevEnabledInd = 0;
 
-    function onCheckClick({ currentTarget, shiftKey }) {
+    function onCheck({ currentTarget, shiftKey }) {
         const inputInd = inputs.indexOf(currentTarget);
 
         if (!currentTarget.checked) {
@@ -19,7 +19,7 @@
         if (prevEnabledInd <= inputInd) {
             const aboveEnabledInputInd = indexOfPrecedingEnabled(inputInd - 1);
 
-            for (let i = aboveEnabledInputInd + 1; i < inputInd; i++) {
+            for (let i = aboveEnabledInputInd; i < inputInd; i++) {
                 inputs[i].checked = true;
             }
         } else {
@@ -57,7 +57,7 @@
     document.querySelectorAll('.checkbox')
         .forEach(el => {
             inputs.push(el);
-            el.addEventListener('click', onCheckClick);
+            el.addEventListener('click', onCheck);
         })
     
 })();
