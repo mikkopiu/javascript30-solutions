@@ -25,19 +25,12 @@
     function onKeyDown(evt) {
         let { code } = evt;
         code = code.replace('Key', '');
-        if (!KEY_MAP[code]) {
+        const key = KEY_MAP[code];
+        if (!key) {
             return false;
         }
 
-        let keyEl = KEY_MAP[code].el;
-        let audioEl = KEY_MAP[code].audioEl;
-
-        // Reset playback
-        audioEl.currentTime = 0;
-
-        // Start playback
-        keyEl.classList.add('playing');
-        audioEl.play();
+        playSound(key);
     }
 
     /**
@@ -53,6 +46,35 @@
             return false;
         }
         KEY_MAP[code].el.classList.remove('playing');
+    }
+
+    function onKeyClick(evt) {
+        const code = String.fromCharCode(evt.currentTarget.getAttribute('data-key'));
+        const key = KEY_MAP[code];
+        if (!key) {
+            return false;
+        }
+
+        playSound(key, true);
+    }
+
+    function playSound(key, isClick = false) {
+        const keyEl = key.el;
+        const audioEl = key.audioEl;
+
+        // Reset playback
+        audioEl.currentTime = 0;
+
+        // Start playback
+        keyEl.classList.add('playing');
+        audioEl.play();
+
+        if (isClick) {
+            // Hack for clicking as we know the transition takes 70ms
+            // We could also listen to the audio end event,
+            // but this is a simpler way to prevent errors on repeat actions.
+            setTimeout(() => keyEl.classList.remove('playing'), 70);
+        }
     }
 
     /**
@@ -74,6 +96,7 @@
                 <span class="key-description">${key.sound}</span>
             `;
             keysContainer.appendChild(keyEl);
+            keyEl.addEventListener('click', onKeyClick);
 
             // Create the matching audio element
             const audioEl = KEY_MAP[char].audioEl = document.createElement('audio');
